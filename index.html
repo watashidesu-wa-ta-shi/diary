@@ -15,8 +15,27 @@
 
   <script>
     async function loadPosts() {
-      const apiUrl = "https://api.github.com/repos/watashidesu-wa-ta-shi/diary/contents/posts";
-      const res = await fetch(apiUrl);
-      const files = await res.json();
+      const url = "https://raw.githubusercontent.com/watashidesu-wa-ta-shi/diary/main/posts/";
+      const res = await fetch(url);
+      const text = await res.text();
 
-      const
+      const files = [...text.matchAll(/href="([^"]+\.md)"/g)]
+        .map(m => m[1])
+        .sort()
+        .reverse();
+
+      const container = document.getElementById('posts');
+
+      files.forEach(file => {
+        const title = file.replace(".md", "");
+        const link = document.createElement('a');
+        link.href = "./posts/" + file;
+        link.innerHTML = `<div class="post">${title}</div>`;
+        container.appendChild(link);
+      });
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
