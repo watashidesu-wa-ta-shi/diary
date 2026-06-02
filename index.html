@@ -28,7 +28,7 @@
     mdFiles.forEach(file => {
       const title = file.name.replace(".md", "");
       const link = document.createElement('a');
-      link.href = "./posts/" + file.name;
+      link.href = "./posts/post.html?file=" + file.name;
       link.textContent = title;
 
       const post = document.createElement('div');
