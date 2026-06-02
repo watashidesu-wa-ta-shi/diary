@@ -23,7 +23,7 @@
       const params = new URLSearchParams(location.search);
       const file = params.get("file");
 
-      // GitHub Pages ではなく raw.githubusercontent.com から取得（確実に動く）
+      // ←←← ここが最重要ポイント（絶対パス）
       const url = "https://raw.githubusercontent.com/watashidesu-wa-ta-shi/diary/main/posts/" + file;
 
       const res = await fetch(url);
