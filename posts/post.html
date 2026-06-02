@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diary Post</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; line-height: 1.7; }
+    h1 { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div id="content">Loading...</div>
+
+  <script>
+    async function loadPost() {
+      const params = new URLSearchParams(location.search);
+      const file = params.get("file");
+
+      const res = await fetch(file);
+      const md = await res.text();
+
+      document.getElementById("content").innerHTML = marked.parse(md);
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>
