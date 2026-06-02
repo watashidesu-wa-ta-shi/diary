@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diary</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; }
+    a { text-decoration: none; color: #0366d6; }
+    .post { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Diary</h1>
+  <div id="posts"></div>
+
+  <script>
+    async function loadPosts() {
+      const url = "https://raw.githubusercontent.com/watashidesu-wa-ta-shi/diary/main/posts/";
+      const res = await fetch(url);
+      const text = await res.text();
+
+      const files = [...text.matchAll(/href="([^"]+\.md)"/g)]
+        .map(m => m[1])
+        .sort()
+        .reverse();
+
+      const container = document.getElementById('posts');
+
+      files.forEach(file => {
+        const title = file.replace(".md", "");
+        const link = document.createElement('a');
+        link.href = "./posts/" + file;
+        link.innerHTML = `<div class="post">${title}</div>`;
+        container.appendChild(link);
+      });
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
