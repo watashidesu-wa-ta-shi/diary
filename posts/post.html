@@ -1,95 +1,23 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Diary</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-      max-width: 700px;
-      margin: 40px auto;
-      background: #f5f5f7;
-      padding: 0 20px;
-    }
-    h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 30px;
-      color: #111;
-    }
-    .post {
-      background: #fff;
-      padding: 18px 20px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-    }
-    .post:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-    }
-    a {
-      text-decoration: none;
-      color: #111;
-      font-size: 18px;
-      font-weight: 600;
-    }
-    .date {
-      display: block;
-      margin-top: 6px;
-      font-size: 13px;
-      color: #888;
-    }
-  </style>
-</head>
-<body>
-  <h1>Diary</h1>
-  <div id="posts"></div>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diary Post</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+@@ -11,6 +12,7 @@
+margin: 40px auto; 
+line-height: 1.7; 
+padding: 0 20px;
+      font-size: clamp(16px, 4vw, 22px);
+}
+h1 { margin-bottom: 20px; }
+</style>
+@@ -23,7 +25,6 @@
+const params = new URLSearchParams(location.search);
+const file = params.get("file");
 
-  <script>
-    async function loadPosts() {
-      const api = "https://api.github.com/repos/watashidesu-wa-ta-shi/diary/contents/posts";
-      const res = await fetch(api);
-      const files = await res.json();
+      // ←←← ここが最重要ポイント（絶対パス）
+const url = "https://raw.githubusercontent.com/watashidesu-wa-ta-shi/diary/main/posts/" + file;
 
-      const mdFiles = files
-        .filter(f => f.name.endsWith(".md"))
-        .sort((a, b) => b.name.localeCompare(a.name));
-
-      const container = document.getElementById('posts');
-
-      for (const file of mdFiles) {
-        let title = file.name.replace(".md", "");
-        try {
-          const raw = await fetch(file.download_url);
-          const text = await raw.text();
-          const firstLine = text.split("\n")[0].trim();
-          if (firstLine.startsWith("#")) {
-            title = firstLine.replace(/^#+\s*/, "");
-          }
-        } catch (e) {
-          console.warn("タイトル取得失敗:", file.name, e);
-        }
-
-        const link = document.createElement('a');
-        link.href = "./posts/post.html?file=" + file.name;
-        link.textContent = title;
-
-        const date = document.createElement('span');
-        date.className = "date";
-        date.textContent = file.name.replace(".md", "");
-
-        const post = document.createElement('div');
-        post.className = 'post';
-        post.appendChild(link);
-        post.appendChild(date);
-
-        container.appendChild(post);
-      }
-    }
-
-    loadPosts();
-  </script>
-</body>
-</html>
+const res = await fetch(url);
