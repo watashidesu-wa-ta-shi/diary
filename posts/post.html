@@ -15,10 +15,10 @@
 
       -webkit-text-size-adjust: 100%;
 
-      /* ★ 文字を小さめに（前の約1/2） */
+      /* 文字小さめ（読みやすい） */
       font-size: clamp(13px, 3vw, 17px);
 
-      /* ★ 行間を広げて読みやすく */
+      /* 行間広め */
       line-height: 1.95;
     }
 
@@ -30,7 +30,7 @@
       line-height: 1.4;
     }
 
-    /* ★ シンプルなBackボタン（左下固定） */
+    /* Backボタン（左下固定・シンプル） */
     .back-btn {
       position: fixed;
       bottom: 20px;
@@ -61,5 +61,45 @@
 </head>
 <body>
 
-  <!-- ★ シンプルなBackボタン -->
-  <a class="back-btn" href="../index.html">
+  <!-- シンプルなBackボタン -->
+  <a class="back-btn" href="../index.html">＜ Back</a>
+
+  <div class="content" id="content"></div>
+
+  <script>
+    async function loadPost() {
+      const params = new URLSearchParams(window.location.search);
+      const file = params.get("file");
+      if (!file) return;
+
+      const url = `https://raw.githubusercontent.com/watashidesu-wa-ta-shi/diary/main/posts/${file}`;
+      const res = await fetch(url);
+      const md = await res.text();
+
+      // 壊れないMarkdownパーサー（安全版）
+      let html = md
+        // 見出し
+        .replace(/^# (.*)$/gim, '<h1>$1</h1>')
+        .replace(/^## (.*)$/gim, '<h2>$1</h2>')
+        .replace(/^### (.*)$/gim, '<h3>$1</h3>')
+
+        // 太字・斜体
+        .replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>')
+        .replace(/\*(.*?)\*/gim, '<i>$1</i>')
+
+        // 段落（空行2つ以上）
+        .replace(/\n{2,}/g, '</p><p>')
+
+        // 改行
+        .replace(/\n/g, '<br>');
+
+      // <p> で囲む
+      html = `<p>${html}</p>`;
+
+      document.getElementById("content").innerHTML = html;
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>
