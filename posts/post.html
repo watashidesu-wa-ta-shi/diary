@@ -26,7 +26,6 @@
       line-height: 1.4;
     }
 
-    /* ★ Backボタン（白い枠の中に固定） */
     .back-btn {
       position: absolute;
       bottom: 10px;
@@ -50,20 +49,19 @@
       padding: 18px;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
       position: relative;
       padding-bottom: 40px;
     }
 
-    /* 通常段落（空行） */
+    /* 段落（空行） */
     .para {
       margin: 1.1em 0;
       line-height: 1.75;
     }
 
-    /* ★ 明示的な改行（1行改行） → 狭い余白 */
+    /* ★ 明示的な改行（狭い） */
     .linebreak {
-      margin: 0.35em 0;  /* ← ここで改行幅を調整できる（今の1/4〜1/3） */
+      margin: 0.3em 0; /* ← 改行幅ここで調整 */
       line-height: 1.2;
     }
   </style>
@@ -85,7 +83,7 @@
       const res = await fetch(url);
       const md = await res.text();
 
-      // ★ 改行処理を完全に制御する方式
+      // ★ 改行処理（Windows/Mac両対応）
       let html = md
         // 見出し
         .replace(/^# (.*)$/gim, '<h1>$1</h1>')
