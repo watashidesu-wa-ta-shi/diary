@@ -26,7 +26,7 @@
       line-height: 1.4;
     }
 
-    /* ★ Backボタン（白いカードの左下に寄せる） */
+    /* ★ Backボタン（白い枠の中に固定） */
     .back-btn {
       position: absolute;
       bottom: 10px;
@@ -47,25 +47,22 @@
 
     .content {
       background: #fff;
-      padding: 18px; /* ← フチ狭め */
+      padding: 18px;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       line-height: 1.75;
       font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
       position: relative;
-      padding-bottom: 40px; /* ← Backボタンのスペース確保 */
+      padding-bottom: 40px;
     }
 
     .content p {
-      margin-bottom: 1.1em;
+      margin: 0 0 1.1em 0;
     }
 
-    /* ★ 改行幅を強制的に狭くする（1/4） */
-    .content br {
-      line-height: 0.3 !important; /* ← 親の line-height を上書き */
-      display: block;
-      margin: 0;
-      padding: 0;
+    /* ★ 改行専用の段落（極小の余白） */
+    .small-gap {
+      margin: 0.3em 0; /* ← ここで改行幅を確実に制御できる */
     }
   </style>
 </head>
@@ -86,15 +83,15 @@
       const res = await fetch(url);
       const md = await res.text();
 
-      // 壊れないMarkdownパーサー
+      // ★ 改行を <p class="small-gap"></p> に変換する
       let html = md
         .replace(/^# (.*)$/gim, '<h1>$1</h1>')
         .replace(/^## (.*)$/gim, '<h2>$1</h2>')
         .replace(/^### (.*)$/gim, '<h3>$1</h3>')
         .replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>')
         .replace(/\*(.*?)\*/gim, '<i>$1</i>')
-        .replace(/\n{2,}/g, '</p><p>')
-        .replace(/\n/g, '<br>');
+        .replace(/\n{2,}/g, '</p><p>')        // 段落
+        .replace(/\n/g, '</p><p class="small-gap"></p><p>'); // ← 明示的改行を小さい段落に
 
       html = `<p>${html}</p>`;
       document.getElementById("content").innerHTML = html;
