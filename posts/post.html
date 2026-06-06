@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -13,7 +14,7 @@ padding: 0 20px;
 }
 h1 { margin-bottom: 20px; }
 </style>
-@@ -23,7 +25,6 @@
+@@ -23,16 +25,15 @@
 const params = new URLSearchParams(location.search);
 const file = params.get("file");
 
@@ -21,3 +22,12 @@ const file = params.get("file");
 const url = "https://raw.githubusercontent.com/watashidesu-wa-ta-shi/diary/main/posts/" + file;
 
 const res = await fetch(url);
+const md = await res.text();
+
+document.getElementById("content").innerHTML = marked.parse(md);
+}
+
+loadPost();
+</script>
+</body>
+</html>
