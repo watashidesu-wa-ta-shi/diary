@@ -2,40 +2,55 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-
-  <!-- ★ iOSの自動縮小を止める（追加） -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   <title>Diary Post</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
       max-width: 700px;
       margin: 40px auto;
       background: #f5f5f7;
       padding: 0 20px;
 
-      /* ★ iOSの勝手な文字縮小を禁止（追加） */
+      /* iOSの勝手な縮小を防ぐ */
       -webkit-text-size-adjust: 100%;
 
-      /* ★ 画面幅に応じて文字サイズを自動調整（追加） */
-      font-size: clamp(18px, 4.5vw, 24px);
+      /* 文字サイズを自然に調整（前より小さめ） */
+      font-size: clamp(16px, 3.8vw, 20px);
+
+      /* 行間を広げて読みやすく */
+      line-height: 1.9;
     }
+
     h1 {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       color: #111;
+      line-height: 1.4;
     }
+
     a {
       text-decoration: none;
       color: #0366d6;
+      font-size: 15px;
     }
+
     .content {
       background: #fff;
-      padding: 20px;
+      padding: 24px;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
+      /* 本文の行間をさらに読みやすく */
+      line-height: 1.9;
+      font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    }
+
+    /* 段落間の余白を広げる */
+    .content p {
+      margin-bottom: 1.2em;
     }
   </style>
 </head>
@@ -60,9 +75,10 @@
         .replace(/^### (.*$)/gim, '<h3>$1</h3>')
         .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
         .replace(/\*(.*)\*/gim, '<i>$1</i>')
-        .replace(/\n$/gim, '<br>');
+        .replace(/\n\n/g, '</p><p>')   // 段落
+        .replace(/\n/g, '<br>');       // 改行
 
-      document.getElementById("content").innerHTML = html;
+      document.getElementById("content").innerHTML = `<p>${html}</p>`;
     }
 
     loadPost();
