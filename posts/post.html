@@ -15,7 +15,7 @@
 
       -webkit-text-size-adjust: 100%;
       font-size: clamp(13px, 3vw, 17px);
-      line-height: 1.75; /* ← 行間少し狭め */
+      line-height: 1.75;
     }
 
     h1 {
@@ -26,11 +26,11 @@
       line-height: 1.4;
     }
 
-    /* ★ 白いカードの左下に固定するBackボタン */
+    /* ★ Backボタン（白いカードの左下・本文と距離を取る） */
     .back-btn {
       position: absolute;
-      bottom: 12px;
-      left: 12px;
+      bottom: -32px; /* ← 本文から離す（ここが重要） */
+      left: 0;
       font-size: 13px;
       color: #555;
       text-decoration: none;
@@ -42,7 +42,8 @@
     }
 
     .content-wrapper {
-      position: relative; /* ← Backボタンの基準にする */
+      position: relative;
+      margin-bottom: 60px; /* Backボタンの分だけ余白を確保 */
     }
 
     .content {
@@ -57,13 +58,18 @@
     .content p {
       margin-bottom: 1.1em;
     }
+
+    /* ★ 明示的な改行（<br>）の余白を半分にする */
+    .content br {
+      line-height: 0.9; /* ← ここで改行幅を狭くする */
+    }
   </style>
 </head>
 <body>
 
   <div class="content-wrapper">
-    <a class="back-btn" href="../index.html">もどる</a>
     <div class="content" id="content"></div>
+    <a class="back-btn" href="../index.html">もどる</a>
   </div>
 
   <script>
