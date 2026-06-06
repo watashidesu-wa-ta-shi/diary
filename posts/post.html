@@ -26,10 +26,11 @@
       line-height: 1.4;
     }
 
-    /* ★ Backボタン（本文から適度に離す） */
+    /* ★ Backボタン（白いカードの左下に寄せる） */
     .back-btn {
-      display: inline-block;
-      margin-top: 28px; /* ← 白いカードからの距離 */
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
       font-size: 13px;
       color: #555;
       text-decoration: none;
@@ -40,22 +41,28 @@
       opacity: 1;
     }
 
+    .content-wrapper {
+      position: relative;
+    }
+
     .content {
       background: #fff;
-      padding: 18px; /* ← フチを狭くした */
+      padding: 18px; /* ← フチ狭め */
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       line-height: 1.75;
       font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      position: relative;
+      padding-bottom: 40px; /* ← Backボタンのスペース確保 */
     }
 
     .content p {
       margin-bottom: 1.1em;
     }
 
-    /* ★ 明示的な改行（<br>）の余白をさらに狭く（1/4） */
+    /* ★ 改行幅を強制的に狭くする（1/4） */
     .content br {
-      line-height: 0.3; /* ← これでかなり自然な狭さになる */
+      line-height: 0.3 !important; /* ← 親の line-height を上書き */
       display: block;
       margin: 0;
       padding: 0;
@@ -64,8 +71,10 @@
 </head>
 <body>
 
-  <div class="content" id="content"></div>
-  <a class="back-btn" href="../index.html">もどる</a>
+  <div class="content-wrapper">
+    <div class="content" id="content"></div>
+    <a class="back-btn" href="../index.html">もどる</a>
+  </div>
 
   <script>
     async function loadPost() {
