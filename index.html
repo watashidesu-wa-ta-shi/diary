@@ -13,20 +13,34 @@
   <h1>Diary</h1>
   <div id="posts"></div>
 
- <script>
+<script>
   async function loadPosts() {
     const api = "https://api.github.com/repos/watashidesu-wa-ta-shi/diary/contents/posts";
     const res = await fetch(api);
     const files = await res.json();
 
+    // .md のみ取得して新しい順に並べる
     const mdFiles = files
       .filter(f => f.name.endsWith(".md"))
       .sort((a, b) => b.name.localeCompare(a.name));
 
     const container = document.getElementById('posts');
 
-    mdFiles.forEach(file => {
-      const title = file.name.replace(".md", "");
+    for (const file of mdFiles) {
+      // Markdownファイルの中身を取得
+      const raw = await fetch(file.download_url);
+      const text = await raw.text();
+
+      // タイトルは「最初の行」を使う（例：# タイトル）
+      let title = file.name.replace(".md", ""); // fallback
+      const firstLine = text.split("\n")[0].trim();
+
+      // Markdownの見出し (# タイトル) を除去
+      if (firstLine.startsWith("#")) {
+        title = firstLine.replace(/^#+\s*/, "");
+      }
+
+      // リンク生成
       const link = document.createElement('a');
       link.href = "./posts/post.html?file=" + file.name;
       link.textContent = title;
@@ -36,7 +50,7 @@
       post.appendChild(link);
 
       container.appendChild(post);
-    });
+    }
   }
 
   loadPosts();
